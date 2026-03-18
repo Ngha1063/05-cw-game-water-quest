@@ -49,6 +49,13 @@ function endGame() {
   gameActive = false; // Mark the game as inactive
   clearInterval(spawnInterval); // Stop spawning water cans
 }
+document.getElementById("reset-game").addEventListener("click", resetGame);
 
+function resetGame() {
+  endGame();
+  score = 0;
+  document.getElementById("score").textContent = score;
+  createGrid();
+}
 // Set up click handler for the start button
 document.getElementById('start-game').addEventListener('click', startGame);
