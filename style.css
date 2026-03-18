@@ -80,8 +80,7 @@ h1 img {
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
   margin: 0 auto;
-  max-width: 500px;
-}
+ max-width: 90vw;
 
 .grid-cell {
   background-color: #e8e8e8;
