@@ -127,7 +127,18 @@ h1 img {
     transform: scale(1); /* End scaling at full size */
   }
 }
+.correct {
+  background-color: lightgreen;
+}
 
+.wrong {
+  background-color: lightcoral;
+}
+
+.obstacle {
+  background: red;
+  border-radius: 50%;
+}
 
 button {
   background-color: #4CAF50;
