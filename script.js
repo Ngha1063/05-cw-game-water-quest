@@ -34,9 +34,42 @@ function spawnWaterCan() {
     <div class="water-can-wrapper">
       <div class="water-can"></div>
     </div>
+    
   `;
-}
+  const isObstacle = Math.random() < 0.3;
 
+if (isObstacle) {
+  randomCell.innerHTML = `<div class="obstacle"></div>`;
+  randomCell.dataset.type = "obstacle";
+} else {
+  randomCell.innerHTML = `<div class="water-can"></div>`;
+  randomCell.dataset.type = "can";
+}
+}
+if (score >= GOAL_CANS) {
+  endGame();
+  alert("You win!");
+}
+function handleClick(cell) {
+  if (!gameActive || !cell.dataset.type) return;
+
+  if (cell.dataset.type === "can") {
+    score++;
+    cell.classList.add("correct");
+  } else {
+    score = Math.max(0, score - 1);
+    cell.classList.add("wrong");
+  }
+
+  document.getElementById("score").textContent = score;
+
+  setTimeout(() => {
+    cell.classList.remove("correct", "wrong");
+  }, 200);
+
+  cell.innerHTML = "";
+  cell.dataset.type = "";
+}
 // Initializes and starts a new game
 function startGame() {
   if (gameActive) return; // Prevent starting a new game if one is already active
