@@ -1,54 +1,146 @@
-// Game configuration and state variables
-const GOAL_CANS = 25;        // Total items needed to collect
-let currentCans = 0;         // Current number of items collected
-let gameActive = false;      // Tracks if game is currently running
-let spawnInterval;          // Holds the interval for spawning items
+const GOAL_CANS = 10;
+let score = 0;
+let gameActive = false;
+let spawnInterval;
 
-// Creates the 3x3 game grid where items will appear
+const scoreDisplay = document.getElementById('score');
+const message = document.getElementById('message');
+
+// Create grid
 function createGrid() {
   const grid = document.querySelector('.game-grid');
-  grid.innerHTML = ''; // Clear any existing grid cells
+  grid.innerHTML = '';
+
   for (let i = 0; i < 9; i++) {
     const cell = document.createElement('div');
-    cell.className = 'grid-cell'; // Each cell represents a grid square
+    cell.className = 'grid-cell';
+
+    cell.addEventListener('click', () => handleClick(cell));
+
     grid.appendChild(cell);
   }
 }
 
-// Ensure the grid is created when the page loads
 createGrid();
 
-// Spawns a new item in a random grid cell
-function spawnWaterCan() {
-  if (!gameActive) return; // Stop if the game is not active
+// Spawn items
+function spawnItem() {
+  if (!gameActive) return;
+
   const cells = document.querySelectorAll('.grid-cell');
-  
-  // Clear all cells before spawning a new water can
   cells.forEach(cell => (cell.innerHTML = ''));
 
-  // Select a random cell from the grid to place the water can
   const randomCell = cells[Math.floor(Math.random() * cells.length)];
 
-  // Use a template literal to create the wrapper and water-can element
-  randomCell.innerHTML = `
-    <div class="water-can-wrapper">
-      <div class="water-can"></div>
-    </div>
-  `;
+  const isObstacle = Math.random() < 0.3; // 30% chance
+
+  if (isObstacle) {
+    randomCell.innerHTML = `<div class="obstacle"></div>`;
+    randomCell.dataset.type = "obstacle";
+  } else {
+    randomCell.innerHTML = `<div class="water-can"></div>`;
+    randomCell.dataset.type = "can";
+  }
 }
 
-// Initializes and starts a new game
+// Handle clicks
+function handleClick(cell) {
+  if (!gameActive || !cell.dataset.type) return;
+
+  if (cell.dataset.type === "can") {
+    score++;
+    flash(cell, "correct");
+  } else {
+    score = Math.max(0, score - 1);
+    flash(cell, "wrong");
+  }
+
+  scoreDisplay.textContent = score;
+
+  if (score >= GOAL_CANS) {
+    winGame();
+  }
+
+  cell.innerHTML = '';
+  cell.dataset.type = '';
+}
+
+// Visual feedback
+function flash(cell, className) {
+  cell.classList.add(className);
+  setTimeout(() => cell.classList.remove(className), 200);
+}
+
+// Start game
 function startGame() {
-  if (gameActive) return; // Prevent starting a new game if one is already active
+  if (gameActive) return;
+
   gameActive = true;
-  createGrid(); // Set up the game grid
-  spawnInterval = setInterval(spawnWaterCan, 1000); // Spawn water cans every second
+  score = 0;
+  scoreDisplay.textContent = score;
+  message.textContent = '';
+
+  createGrid();
+  spawnInterval = setInterval(spawnItem, 800);
 }
 
-function endGame() {
-  gameActive = false; // Mark the game as inactive
-  clearInterval(spawnInterval); // Stop spawning water cans
+// Reset game
+function resetGame() {
+  gameActive = false;
+  clearInterval(spawnInterval);
+
+  score = 0;
+  scoreDisplay.textContent = score;
+  message.textContent = '';
+
+  createGrid();
 }
 
-// Set up click handler for the start button
+// Win condition
+function winGame() {
+  gameActive = false;
+  clearInterval(spawnInterval);
+  message.textContent = "You win! 🎉";
+  launchConfetti();
+}
+
+// Confetti effect
+function launchConfetti() {
+  const canvas = document.getElementById("confetti-canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const pieces = [];
+
+  for (let i = 0; i < 100; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 5 + 5,
+      speed: Math.random() * 3 + 2
+    });
+  }
+
+  function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    pieces.forEach(p => {
+      ctx.fillRect(p.x, p.y, p.size, p.size);
+      p.y += p.speed;
+
+      if (p.y > canvas.height) p.y = 0;
+    });
+
+    requestAnimationFrame(update);
+  }
+
+  update();
+
+  setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 3000);
+}
+
+// Buttons
 document.getElementById('start-game').addEventListener('click', startGame);
+document.getElementById('reset-game').addEventListener('click', resetGame);
