@@ -1,21 +1,13 @@
-// =====================
-// GAME CONFIG
-// =====================
+
 const GOAL_CANS = 10;
 let score = 0;
 let gameActive = false;
 let spawnInterval;
 
-// =====================
-// DOM ELEMENTS
-// =====================
 const scoreDisplay = document.getElementById('score');
 const message = document.getElementById('message');
 const grid = document.querySelector('.game-grid');
 
-// =====================
-// CREATE GRID
-// =====================
 function createGrid() {
   grid.innerHTML = '';
 
@@ -33,9 +25,6 @@ function createGrid() {
 // Run on load
 createGrid();
 
-// =====================
-// SPAWN ITEMS
-// =====================
 function spawnItem() {
   if (!gameActive) return;
 
@@ -62,9 +51,6 @@ function spawnItem() {
   }
 }
 
-// =====================
-// HANDLE CLICK
-// =====================
 function handleClick(cell) {
   if (!gameActive || !cell.dataset.type) return;
 
@@ -83,15 +69,12 @@ function handleClick(cell) {
   cell.innerHTML = '';
   cell.dataset.type = '';
 
-  // Check win condition
+ 
   if (score >= GOAL_CANS) {
     winGame();
   }
 }
 
-// =====================
-// VISUAL FEEDBACK
-// =====================
 function flash(cell, className) {
   cell.classList.add(className);
   setTimeout(() => {
@@ -99,9 +82,6 @@ function flash(cell, className) {
   }, 200);
 }
 
-// =====================
-// START GAME
-// =====================
 function startGame() {
   if (gameActive) return;
 
@@ -115,17 +95,11 @@ function startGame() {
   spawnInterval = setInterval(spawnItem, 800);
 }
 
-// =====================
-// END GAME
-// =====================
 function endGame() {
   gameActive = false;
   clearInterval(spawnInterval);
 }
 
-// =====================
-// RESET GAME
-// =====================
 function resetGame() {
   endGame();
 
@@ -136,18 +110,12 @@ function resetGame() {
   createGrid();
 }
 
-// =====================
-// WIN GAME
-// =====================
 function winGame() {
   endGame();
   message.textContent = "You win! 🎉";
   launchConfetti();
 }
 
-// =====================
-// CONFETTI EFFECT
-// =====================
 function launchConfetti() {
   const canvas = document.getElementById("confetti-canvas");
   const ctx = canvas.getContext("2d");
@@ -190,8 +158,5 @@ function launchConfetti() {
   }, 3000);
 }
 
-// =====================
-// BUTTON EVENTS
-// =====================
 document.getElementById('start-game').addEventListener('click', startGame);
 document.getElementById('reset-game').addEventListener('click', resetGame);
