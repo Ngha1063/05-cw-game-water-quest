@@ -1,47 +1,41 @@
-# charity: water – Water Quest Game Starter
+# 💧 Water Quest Game
 
-In this game, users tap charity: water’s signature yellow jerry cans as fast as they can to earn points. You’ll be working from a partially built version of the game. Some functionality is already provided, and your job is to complete the rest.
+An interactive browser-based game where players collect water cans while avoiding obstacles. The game is inspired by real-world water accessibility challenges and includes multiple difficulty levels, responsive design, and engaging visual feedback.
 
-## What’s Already Done
+---
 
-The starter files already include:
+## Features
 
-- A **heading and tagline**
-- A **start button**
-- A **game container** displaying a grid
-- A **placeholder timer and score** (not functional yet)
-- A **logo image** from charity: water
-- Working code that:
-  - Starts the game when the start button is clicked  
-  - Makes jerry cans pop up randomly
+- ✅ Interactive 3×3 grid gameplay
+- ✅ Click-based scoring system
+- ✅ Obstacles that reduce score
+- ✅ Real-time score updates
+- ✅ Visual feedback (correct/wrong clicks)
+- ✅ Confetti animation on win
+- ✅ Reset and Start controls
+- ✅ Responsive design (mobile-friendly)
+## 🧠 How It Works
 
-## What You Need to Add
+- A water can appears randomly in the grid.
+- Click the water can to **increase your score**.
+- Clicking an obstacle will **decrease your score**.
+- Reach the target score to win the game.
+- The game provides instant visual feedback for each interaction.
 
-Here’s what you're required to implement to bring the game to life:
 
-### Game Functionality
+## 🎨 Design Choices
 
-- **Update the score**
-  - +1 point for each can clicked  
+- Uses a clean and simple UI for clarity and usability
+- Responsive grid layout for compatibility across devices
+- Visual feedback (color flashes) enhances user interaction
+- Font inspired by charity: water branding for consistency
 
-- **Add a 30-second timer**
-  - When the timer reaches 0, the game ends  
+---
 
-- **Display a message when the game ends**
-  - If the player scores **20 or more points**, show a **winning** message  
-  - If the player scores **less than 20 points**, show a **"try again"** message  
-  - Create one array of possible winning messages and one array of losing messages  
-  - Depending on whether the user wins or loses, randomly pick and display a message from the appropriate array  
+## 🌍 Charity: Water Integration
 
-### Visual Styling
+This project includes a footer with a link to support:
 
-- **Add charity: water branding**
-  
-  - Use the provided logo  
-  - Use the [charity: water brand guidelines](https://drive.google.com/file/d/1ct4zYRIwHAtxoNQoeaVwWYPdnruSC6sr/view) to stay on-brand with colors and styling
-  - Add styling rules to ensure your game layout adjusts well across different screen sizes
+👉 https://www.charitywater.org/
 
-These are the minimum requirements, but if you'd like an additional challenge go ahead and give the LevelUps a shot! For example, you could add logic to decrease the user's score if they miss a jerry can. Have fun and make the game your own!
-
-If you have any questions or need any assistance with your code, reach out to the HelpHub or attend a Drop-In Hour. You got this!!
-
+The game is inspired by the importance of access to clean water worldwide.
