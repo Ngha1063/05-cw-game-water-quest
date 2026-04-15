@@ -1,12 +1,23 @@
 
-const GOAL_CANS = 10;
+// GAME CONFIG
+
+let GOAL_CANS = 10;
+let spawnSpeed = 800;
+
 let score = 0;
 let gameActive = false;
 let spawnInterval;
 
+
+// DOM ELEMENTS
+
 const scoreDisplay = document.getElementById('score');
 const message = document.getElementById('message');
 const grid = document.querySelector('.game-grid');
+const difficultySelect = document.getElementById('difficulty');
+
+
+// CREATE GRID
 
 function createGrid() {
   grid.innerHTML = '';
@@ -15,7 +26,6 @@ function createGrid() {
     const cell = document.createElement('div');
     cell.className = 'grid-cell';
 
-    // Add click handler
     cell.addEventListener('click', () => handleClick(cell));
 
     grid.appendChild(cell);
@@ -25,21 +35,21 @@ function createGrid() {
 // Run on load
 createGrid();
 
+
+// SPAWN ITEM 
+
 function spawnItem() {
   if (!gameActive) return;
 
   const cells = document.querySelectorAll('.grid-cell');
 
-  // Clear grid
   cells.forEach(cell => {
     cell.innerHTML = '';
     cell.dataset.type = '';
   });
 
-  // Pick random cell
   const randomCell = cells[Math.floor(Math.random() * cells.length)];
 
-  // 30% chance obstacle
   const isObstacle = Math.random() < 0.3;
 
   if (isObstacle) {
@@ -50,6 +60,9 @@ function spawnItem() {
     randomCell.dataset.type = "can";
   }
 }
+
+
+// HANDLE CLICK
 
 function handleClick(cell) {
   if (!gameActive || !cell.dataset.type) return;
@@ -62,18 +75,18 @@ function handleClick(cell) {
     flash(cell, "wrong");
   }
 
-  // Update score display
   scoreDisplay.textContent = score;
 
-  // Clear clicked item
   cell.innerHTML = '';
   cell.dataset.type = '';
 
- 
   if (score >= GOAL_CANS) {
     winGame();
   }
 }
+
+
+// VISUAL FEEDBACK
 
 function flash(cell, className) {
   cell.classList.add(className);
@@ -81,6 +94,33 @@ function flash(cell, className) {
     cell.classList.remove(className);
   }, 200);
 }
+
+
+// DIFFICULTY SYSTEM
+
+function setDifficulty() {
+  const diff = difficultySelect.value;
+
+  if (diff === "easy") {
+    GOAL_CANS = 5;
+    spawnSpeed = 1200;
+  } 
+  else if (diff === "normal") {
+    GOAL_CANS = 10;
+    spawnSpeed = 800;
+  } 
+  else if (diff === "hard") {
+    GOAL_CANS = 20;
+    spawnSpeed = 500;
+  } 
+  else if (diff === "extreme") {
+    GOAL_CANS = 30;
+    spawnSpeed = 300;
+  }
+}
+
+
+// START GAME
 
 function startGame() {
   if (gameActive) return;
@@ -92,14 +132,21 @@ function startGame() {
 
   createGrid();
 
-  spawnInterval = setInterval(spawnItem, 800);
+  setDifficulty(); 
+
+  spawnInterval = setInterval(spawnItem, spawnSpeed);
 }
+
+
+// END GAME
 
 function endGame() {
   gameActive = false;
   clearInterval(spawnInterval);
 }
 
+
+// RESET GAME
 function resetGame() {
   endGame();
 
@@ -110,11 +157,17 @@ function resetGame() {
   createGrid();
 }
 
+
+// WIN GAME
+
 function winGame() {
   endGame();
   message.textContent = "You win! 🎉";
   launchConfetti();
 }
+
+
+// CONFETTI
 
 function launchConfetti() {
   const canvas = document.getElementById("confetti-canvas");
@@ -152,11 +205,13 @@ function launchConfetti() {
 
   update();
 
-  // Stop after 3 seconds
   setTimeout(() => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }, 3000);
 }
+
+
+// BUTTON EVENTS
 
 document.getElementById('start-game').addEventListener('click', startGame);
 document.getElementById('reset-game').addEventListener('click', resetGame);
